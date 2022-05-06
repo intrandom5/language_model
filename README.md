@@ -18,8 +18,8 @@ https://github.com/codertimo/BERT-pytorch
 
 0) 레포 설치
  ```bash
- $ git clone https://github.com/intrandom5/language_model.git
- $ cd language_model
+ $ git clone https://github.com/intrandom5/training-BERT-GPT
+ $ cd training-BERT-GPT
  $ pip install -r requirements.txt
  ```
 
