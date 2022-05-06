@@ -1,4 +1,4 @@
-# language_model
+# training-BERT-GPT
  
 언어 모델 구현 및 학습 코드.
 
