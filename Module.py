@@ -3,6 +3,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 from typing import Optional
+import math
 
 # https://github.com/codertimo/BERT-pytorch/blob/master/bert_pytorch/model/utils/layer_norm.py
 class LayerNorm(nn.Module):
@@ -92,6 +93,7 @@ class PositionalEncoding(nn.Module):
         div_term = torch.exp(torch.arange(0, d_model, 2).float() * -(math.log(10000.0) / d_model))
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
+        pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
         
     def forward(self, length: int):
@@ -109,7 +111,7 @@ def get_attn_pad_mask(inputs, input_lengths, expand_length):
             
         for i in range(batch_size):
             non_pad_mask[i, input_lengths[i]:] = 0
-        return non_pad_msak
+        return non_pad_mask
     non_pad_mask = get_transformer_non_pad_mask(inputs, input_lengths)
     pad_mask = non_pad_mask.lt(1)
     attn_pad_mask = pad_mask.unsqueeze(1).expand(-1, expand_length, -1)
