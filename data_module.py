@@ -1,6 +1,5 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from openspeech.data.sampler import SmartBatchingSampler, RandomSampler
 import random
 
 
@@ -95,14 +94,6 @@ class DataModule:
             mode=self.configs.model_name,
         )
         
-        if self.configs.sample_mode == "smart":
-            sampler = SmartBatchingSampler
-        elif self.configs.sample_mode == "random":
-            sampler = RandomSampler
-        
-        self.train_sampler = sampler(data_source=self.train_dataset, batch_size=self.configs.batch_size)
-        self.valid_sampler = sampler(data_source=self.valid_dataset, batch_size=self.configs.batch_size)
-        
     def parse_manifest(self):
         transcripts = []
         with open(self.configs.manifest_file, "r") as f:
@@ -120,13 +111,13 @@ class DataModule:
             return TextDataLoader(
                 dataset=self.train_dataset,
                 num_workers=self.configs.num_workers,
-                batch_sampler=self.train_sampler,
+                batch_size=self.configs.batch_size,
             )
         
         elif mode == "valid":
             return TextDataLoader(
                 dataset=self.valid_dataset, 
                 num_workers=self.configs.num_workers,
-                batch_sampler=self.valid_sampler,
+                batch_size=self.configs.batch_size,
             )
         
